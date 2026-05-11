@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { Workspace, Board, Column, Task } from '../types';
-import { workspaceApi, boardApi, taskApi } from '../services/api';
+import { workspaceApi, boardApi } from '../services/api';
 import toast from 'react-hot-toast';
 
 interface WorkspaceContextType {
