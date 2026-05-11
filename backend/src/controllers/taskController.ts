@@ -275,7 +275,7 @@ export const uploadAttachment = (io: Server) => async (req: AuthRequest, res: Re
       return;
     }
 
-    const attachment = await prisma.attachment.create({
+    await prisma.attachment.create({
       data: {
         taskId,
         filename: file.originalname,
@@ -289,17 +289,21 @@ export const uploadAttachment = (io: Server) => async (req: AuthRequest, res: Re
 
     const task = await prisma.task.findUnique({
       where: { id: taskId },
-      include: { column: { include: { board: true } } },
+      include: {
+        ...taskInclude,
+        column: { include: { board: true } },
+      },
     });
 
     if (task) {
       io.to(`workspace:${task.column.board.workspaceId}`).emit('task:updated', {
-        taskId,
-        attachment,
+        task,
+        columnId: task.columnId,
+        boardId: task.column.boardId,
       });
     }
 
-    res.status(201).json(attachment);
+    res.status(201).json(task);
   } catch {
     res.status(500).json({ message: 'Failed to upload attachment' });
   }

@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { Server } from 'socket.io';
 import { authenticate } from '../middleware/auth';
 import {
   createBoard,
@@ -11,12 +10,6 @@ import {
   updateColumn,
   deleteColumn,
 } from '../controllers/boardController';
-
-let _io: Server;
-
-export const setBoardRouterIo = (io: Server) => {
-  _io = io;
-};
 
 const router = Router({ mergeParams: true });
 

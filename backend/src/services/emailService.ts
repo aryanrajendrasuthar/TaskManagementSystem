@@ -1,17 +1,17 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT || '587'),
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT || '587'),
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 });
 
 const isEmailConfigured = () =>
-  !!(process.env.EMAIL_USER && process.env.EMAIL_PASS);
+  !!(process.env.SMTP_USER && process.env.SMTP_PASS);
 
 export const sendTaskAssignmentEmail = async (
   to: string,
@@ -21,7 +21,7 @@ export const sendTaskAssignmentEmail = async (
   if (!isEmailConfigured()) return;
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'Task Manager <noreply@taskmanager.app>',
+    from: process.env.FROM_EMAIL || 'Task Manager <noreply@taskmanager.app>',
     to,
     subject: `New Task Assigned: ${taskTitle}`,
     html: `
@@ -52,7 +52,7 @@ export const sendInviteEmail = async (
   if (!isEmailConfigured()) return;
 
   await transporter.sendMail({
-    from: process.env.EMAIL_FROM || 'Task Manager <noreply@taskmanager.app>',
+    from: process.env.FROM_EMAIL || 'Task Manager <noreply@taskmanager.app>',
     to,
     subject: `You've been invited to ${workspaceName}`,
     html: `
